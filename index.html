@@ -141,15 +141,27 @@ method.</p>
 <p class="note">GPT-6 Astra with VIA, solved rollouts, sped up. Each video shows the two Blender-rendered camera
 feeds the agent sees.</p>
 <div class="videos">
-  <div class="vid"><video src="assets/shell_game.mp4" autoplay muted loop playsinline controls></video><div>Shell game <span>&middot; track cubes through swaps, then line them up</span></div></div>
-  <div class="vid"><video src="assets/puzzle_6x7.mp4" autoplay muted loop playsinline controls></video><div>Lights Out 6&times;7 <span>&middot; plan presses on 42 buttons</span></div></div>
-  <div class="vid"><video src="assets/set_up_pcr_run.mp4" autoplay muted loop playsinline controls></video><div>Set up a PCR run <span>&middot; seat the plate, close and latch the lid, turn the knob</span></div></div>
-  <div class="vid"><video src="assets/start_incubation.mp4" autoplay muted loop playsinline controls></video><div>Start incubation <span>&middot; load two tubes, run the program, return the tubes</span></div></div>
-  <div class="vid"><video src="assets/handover_dominos.mp4" autoplay muted loop playsinline controls></video><div>Handover dominos <span>&middot; bimanual: stand five blocks in a line, then knock them over</span></div></div>
-  <div class="vid"><video src="assets/cup_pyramid.mp4" autoplay muted loop playsinline controls></video><div>Cup pyramid <span>&middot; bimanual: stack three cups upside down</span></div></div>
+  <div class="vid"><video data-src="assets/shell_game.mp4" poster="assets/shell_game.jpg" muted loop playsinline controls preload="none"></video><div>Shell game <span>&middot; track cubes through swaps, then line them up</span></div></div>
+  <div class="vid"><video data-src="assets/puzzle_6x7.mp4" poster="assets/puzzle_6x7.jpg" muted loop playsinline controls preload="none"></video><div>Lights Out 6&times;7 <span>&middot; plan presses on 42 buttons</span></div></div>
+  <div class="vid"><video data-src="assets/set_up_pcr_run.mp4" poster="assets/set_up_pcr_run.jpg" muted loop playsinline controls preload="none"></video><div>Set up a PCR run <span>&middot; seat the plate, close and latch the lid, turn the knob</span></div></div>
+  <div class="vid"><video data-src="assets/start_incubation.mp4" poster="assets/start_incubation.jpg" muted loop playsinline controls preload="none"></video><div>Start incubation <span>&middot; load two tubes, run the program, return the tubes</span></div></div>
+  <div class="vid"><video data-src="assets/handover_dominos.mp4" poster="assets/handover_dominos.jpg" muted loop playsinline controls preload="none"></video><div>Handover dominos <span>&middot; bimanual: stand five blocks in a line, then knock them over</span></div></div>
+  <div class="vid"><video data-src="assets/cup_pyramid.mp4" poster="assets/cup_pyramid.jpg" muted loop playsinline controls preload="none"></video><div>Cup pyramid <span>&middot; bimanual: stack three cups upside down</span></div></div>
 </div>
 
 <footer>Code and data will be released after the review period.</footer>
 </div>
+<script>
+// Each clip is fetched whole and played from memory: some hosts ignore byte-range requests, which Safari needs to
+// stream an mp4. Clips start when scrolled into view.
+const play = async v => {
+  if (!v.dataset.src) return v.play().catch(() => {});
+  const src = v.dataset.src; delete v.dataset.src;
+  try { v.src = URL.createObjectURL(await (await fetch(src)).blob()); } catch (e) { v.src = src; }
+  v.muted = true; v.play().catch(() => {});
+};
+const seen = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? play(e.target) : e.target.pause()), { threshold: 0.3 });
+document.querySelectorAll('video').forEach(v => seen.observe(v));
+</script>
 </body>
 </html>
