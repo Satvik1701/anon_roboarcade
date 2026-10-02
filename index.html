@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>RoboARCade: Benchmarking Agentic Robot Control</title>
+<meta name="description" content="A benchmark of long-horizon manipulation tasks for agents that control robots directly.">
+<style>
+:root{--bg:#f7f7f4;--panel:#fff;--ink:#16191b;--ink2:#5a6166;--rule:#dfe1dc;--accent:#1f6f8b;--ok:#2f7d4f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121416;--panel:#1a1d20;--ink:#e8eae6;--ink2:#a3aaa6;--rule:#2c3134;--accent:#6cb4cf;--ok:#6cc28f}}
+:root[data-theme="dark"]{--bg:#121416;--panel:#1a1d20;--ink:#e8eae6;--ink2:#a3aaa6;--rule:#2c3134;--accent:#6cb4cf;--ok:#6cc28f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:62rem;margin:0 auto;padding:2.5rem 16px 4rem}
+header{text-align:center;margin-bottom:2rem}
+h1{font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.2;margin:0 0 .4rem;letter-spacing:-.01em}
+.sub{color:var(--ink2);margin:0}
+.anon{display:inline-block;margin-top:.9rem;padding:.25rem .8rem;border:1px solid var(--rule);border-radius:99px;font-size:.85rem;color:var(--ink2)}
+h2{font-size:1.25rem;margin:2.6rem 0 .7rem;padding-bottom:.3rem;border-bottom:1px solid var(--rule)}
+p{margin:.6rem 0}
+.tldr{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:1rem 1.2rem;margin:1.5rem 0}
+.tldr b{color:var(--accent)}
+figure{margin:1.2rem 0;background:#fff;border:1px solid var(--rule);border-radius:8px;padding:.8rem}
+figure img{display:block;width:100%;height:auto}
+figcaption{color:#4a5054;font-size:.9rem;margin-top:.5rem}
+.narrow{max-width:30rem;margin-left:auto;margin-right:auto}
+ul.points{padding-left:1.2rem}ul.points li{margin:.35rem 0}
+.tablewrap{overflow-x:auto;margin:1rem 0}
+table{border-collapse:collapse;width:100%;font-size:.95rem;background:var(--panel);border:1px solid var(--rule);border-radius:8px}
+th,td{padding:.45rem .7rem;border-bottom:1px solid var(--rule);text-align:left;white-space:nowrap}
+th{font-size:.82rem;color:var(--ink2);font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.best td{font-weight:700}
+tr:last-child td{border-bottom:0}
+.note{color:var(--ink2);font-size:.88rem}
+.videos{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.vid{background:var(--panel);border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+.vid video{display:block;width:100%;aspect-ratio:2/1;background:#000}
+.vid div{padding:.45rem .7rem;font-size:.9rem}
+.vid span{color:var(--ink2)}
+footer{margin-top:3rem;color:var(--ink2);font-size:.85rem;text-align:center}
+@media (max-width:720px){.videos{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>RoboARCade: Benchmarking Agentic Robot Control</h1>
+  <p class="sub">A benchmark of long-horizon manipulation tasks for agents that control robots directly</p>
+  <span class="anon">Anonymous authors &middot; paper under double-blind review</span>
+</header>
+
+<div class="tldr">
+  <b>TL;DR.</b> Frontier agents can now act as robot policies: they look at camera images and send end-effector
+  commands. RoboARCade is a benchmark of 22 long-horizon tasks across three embodiments that measures how well
+  they do it. The best agent completes 49.2% of subtasks. Agents fail mostly on approach and precision, and they
+  often claim success too early. A successful demonstration or a self-written prompt raises the score from 54.0%
+  to about 72%, with no human input.
+</div>
+
+<figure>
+  <img src="assets/task_lineup.png" alt="Twenty of the benchmark's tasks rendered in Blender">
+  <figcaption><b>Tasks.</b> 20 of the 22 tasks: single and bimanual manipulation, assembly, physical puzzles and
+  biolab procedures, rendered with Blender.</figcaption>
+</figure>
+
+<h2>Agentic robot control</h2>
+<figure>
+    <img src="assets/setups.svg" alt="Hierarchical VLA, code as policies, and agentic robot control">
+    <figcaption><b>The setting.</b> In agentic robot control the foundation model is the policy. It observes the
+    cameras and proprioception and outputs controller targets directly.</figcaption>
+  </figure>
+  <figure class="narrow">
+    <img src="assets/via_loop.svg" alt="The visual interface loop: probe and adjust a target gripper, then execute a waypoint">
+    <figcaption><b>The VIA interface.</b> The agent adjusts a virtual target gripper in a 3D workspace until it
+    looks right, then executes the waypoint. The robot takes one small step and the agent sees the result.</figcaption>
+  </figure>
+
+<h2>Method</h2>
+<ul class="points">
+  <li><b>Task suite.</b> 22 tasks curated from open-source simulation benchmarks plus original assets. They
+  include tracking cubes through a shell game, a 42-button Lights Out puzzle, a strongbox and toolbox packing with
+  many sequential subtasks, and precise placement under millimetre tolerances.</li>
+  <li><b>Long horizon, three embodiments.</b> A rollout averages 3,311 simulation steps, about 166 s at 20 Hz.
+  Tasks use a single Franka Panda, bimanual Pandas or bimanual YAM arms.</li>
+  <li><b>Wide randomization, photorealistic views.</b> Object placements and task conditions are randomized per
+  seed, and the agent's camera feeds are rendered in Blender at every waypoint.</li>
+  <li><b>Two interfaces.</b> <i>VIA</i> provides an interactive 3D workspace with a virtual target gripper.
+  <i>Multi-view RGBD</i> provides color, depth and calibration, and executes end-effector commands at once. Both
+  use the same simulator and controller.</li>
+  <li><b>Sandboxed agents, automatic grading.</b> Agents run in a sandbox without access to simulator state,
+  task files or grades. Each task defines a sequence of subtasks, checked from the simulator state after the scene
+  comes to rest.</li>
+  <li><b>Autonomous improvement.</b> The agent learns from a successful episode in context (ICL), or distills it
+  into a text prompt and revises that prompt with graded rollouts (T1, T2).</li>
+</ul>
+
+<h2>Zero-shot results</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Agent</th><th>Interface</th><th class="n">Success (%)</th><th class="n">Cost per trial ($)</th><th class="n">Turns per EEF</th><th class="n">Calls per EEF</th></tr></thead>
+  <tbody>
+    <tr><td>GPT-5.6 Sol</td><td>VIA</td><td class="n">16.9</td><td class="n">25.13</td><td class="n">3.7</td><td class="n">3.3</td></tr>
+    <tr><td>Claude Opus 5</td><td>VIA</td><td class="n">30.9</td><td class="n">56.86</td><td class="n">5.0</td><td class="n">5.7</td></tr>
+    <tr><td>Claude Fable 5.1</td><td>Multi-view RGBD</td><td class="n">36.5</td><td class="n">30.40</td><td class="n">1.0</td><td class="n">1.7</td></tr>
+    <tr><td>Claude Fable 5.1</td><td>VIA</td><td class="n">41.5</td><td class="n">51.04</td><td class="n">2.2</td><td class="n">6.9</td></tr>
+    <tr><td>GPT-6 Astra</td><td>Multi-view RGBD</td><td class="n">47.3</td><td class="n">13.39</td><td class="n">1.3</td><td class="n">1.3</td></tr>
+    <tr class="best"><td>GPT-6 Astra</td><td>VIA</td><td class="n">49.2</td><td class="n">32.47</td><td class="n">2.3</td><td class="n">3.0</td></tr>
+  </tbody>
+</table></div>
+<p class="note">22 tasks, 5 seeds each. Success is the share of rubric subtasks completed. Turns and calls are per
+distinct end-effector (EEF) command.</p>
+
+<figure>
+  <img src="assets/retry_lines.svg" alt="Subtask success, approach and visual reasoning over retries, and how attempted subtasks end">
+  <figcaption><b>Where agents fail.</b> A to C: the share of subtasks succeeded, with a correct approach, and with
+  correct visual reasoning within N tries. D: how attempted subtasks end. Visual understanding is rarely the
+  problem. Stronger agents fail more on precision than on approach, and even GPT-6 Astra incorrectly claims
+  success on 18% of attempted subtasks.</figcaption>
+</figure>
+
+<ul class="points">
+  <li><b>Retries help with approach and precision.</b> For Astra with VIA, subtask success rises from 33% on the
+  first try to 48% after five or more tries.</li>
+  <li><b>Agents do not reliably know when they are done.</b> They incorrectly claim success on 18% to 38% of
+  attempted subtasks. VIA reduces these claims compared with multi-view RGBD.</li>
+  <li><b>The interface trades cost for success.</b> VIA adds 5.0 points for Fable and 1.9 for Astra, but uses
+  about twice the model turns per command.</li>
+</ul>
+
+<h2>Autonomous improvement</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>GPT-6 Astra, 5 tasks &times; 10 trials</th><th class="n">Success (%)</th><th class="n">Cost per trial ($)</th></tr></thead>
+  <tbody>
+    <tr><td>Baseline</td><td class="n">54.0</td><td class="n">28.23</td></tr>
+    <tr class="best"><td>In-context success demo (ICL)</td><td class="n">72.7</td><td class="n">30.64</td></tr>
+    <tr><td>Text prompt, round 1 (T1)</td><td class="n">62.5</td><td class="n">30.78</td></tr>
+    <tr><td>Text prompt, round 2 (T2)</td><td class="n">72.0</td><td class="n">22.77</td></tr>
+  </tbody>
+</table></div>
+<p class="note">On a task with no successful episode, a prompt written from five failed attempts reaches 60%
+success, and its revision reaches 5 of 5. Precision errors and incorrect success claims persist under every
+method.</p>
+
+<h2>Rollouts</h2>
+<p class="note">GPT-6 Astra with VIA, solved rollouts, sped up. Each video shows the two Blender-rendered camera
+feeds the agent sees.</p>
+<div class="videos">
+  <div class="vid"><video src="assets/shell_game.mp4" autoplay muted loop playsinline controls></video><div>Shell game <span>&middot; track cubes through swaps, then line them up</span></div></div>
+  <div class="vid"><video src="assets/puzzle_6x7.mp4" autoplay muted loop playsinline controls></video><div>Lights Out 6&times;7 <span>&middot; plan presses on 42 buttons</span></div></div>
+  <div class="vid"><video src="assets/set_up_pcr_run.mp4" autoplay muted loop playsinline controls></video><div>Set up a PCR run <span>&middot; seat the plate, close and latch the lid, turn the knob</span></div></div>
+  <div class="vid"><video src="assets/start_incubation.mp4" autoplay muted loop playsinline controls></video><div>Start incubation <span>&middot; load two tubes, run the program, return the tubes</span></div></div>
+  <div class="vid"><video src="assets/handover_dominos.mp4" autoplay muted loop playsinline controls></video><div>Handover dominos <span>&middot; bimanual: stand five blocks in a line, then knock them over</span></div></div>
+  <div class="vid"><video src="assets/cup_pyramid.mp4" autoplay muted loop playsinline controls></video><div>Cup pyramid <span>&middot; bimanual: stack three cups upside down</span></div></div>
+</div>
+
+<footer>Code and data will be released after the review period.</footer>
+</div>
+</body>
+</html>
