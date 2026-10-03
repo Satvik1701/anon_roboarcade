@@ -23,6 +23,9 @@ p{margin:.6rem 0}
 figure{margin:1.2rem 0;background:#fff;border:1px solid var(--rule);border-radius:8px;padding:.8rem}
 figure img{display:block;width:100%;height:auto}
 figcaption{color:#4a5054;font-size:.9rem;margin-top:.5rem}
+.tasks{display:flex;flex-wrap:wrap;justify-content:center;padding:0;overflow:hidden}
+.tasks img{width:calc(100% / 6);height:auto;display:block}
+@media (max-width:720px){.tasks img{width:calc(100% / 3)}}
 .narrow{max-width:30rem;margin-left:auto;margin-right:auto}
 ul.points{padding-left:1.2rem}ul.points li{margin:.35rem 0}
 .tablewrap{overflow-x:auto;margin:1rem 0}
@@ -56,8 +59,29 @@ footer{margin-top:3rem;color:var(--ink2);font-size:.85rem;text-align:center}
   they do it. The best agent completes 49.2% of subtasks.
 </div>
 
-<figure>
-  <img src="assets/task_lineup.png" alt="Twenty of the benchmark's tasks rendered in Blender">
+<figure class="tasks">
+    <img src="assets/tasks/00_set_up_pcr_run.jpg" alt="set up pcr run" title="set up pcr run" loading="lazy">
+    <img src="assets/tasks/01_shell_game.jpg" alt="shell game" title="shell game" loading="lazy">
+    <img src="assets/tasks/02_toss_in_bin.jpg" alt="bottles in bin" title="bottles in bin" loading="lazy">
+    <img src="assets/tasks/03_pyramid.jpg" alt="cup pyramid" title="cup pyramid" loading="lazy">
+    <img src="assets/tasks/04_serve_warm_drinks.jpg" alt="serve warm drinks" title="serve warm drinks" loading="lazy">
+    <img src="assets/tasks/05_puzzle_6x7.jpg" alt="puzzle 6x7" title="puzzle 6x7" loading="lazy">
+    <img src="assets/tasks/06_handover_dominos.jpg" alt="handover dominos" title="handover dominos" loading="lazy">
+    <img src="assets/tasks/07_vortex_sample.jpg" alt="vortex sample" title="vortex sample" loading="lazy">
+    <img src="assets/tasks/08_lock_the_coins_in_the_strongbox.jpg" alt="lock the coins in the strongbox" title="lock the coins in the strongbox" loading="lazy">
+    <img src="assets/tasks/09_start_making_breakfast.jpg" alt="start making breakfast" title="start making breakfast" loading="lazy">
+    <img src="assets/tasks/10_hang_and_rack.jpg" alt="hang mugs and rack" title="hang mugs and rack" loading="lazy">
+    <img src="assets/tasks/11_pack_tools_into_toolboxes.jpg" alt="pack tools into toolboxes" title="pack tools into toolboxes" loading="lazy">
+    <img src="assets/tasks/12_sort_lego_bricks.jpg" alt="sort lego bricks" title="sort lego bricks" loading="lazy">
+    <img src="assets/tasks/13_organize_table_and_plug_in_charger.jpg" alt="organize table and plug in charger" title="organize table and plug in charger" loading="lazy">
+    <img src="assets/tasks/14_start_incubation.jpg" alt="start incubation" title="start incubation" loading="lazy">
+    <img src="assets/tasks/15_tower.jpg" alt="jenga tower" title="jenga tower" loading="lazy">
+    <img src="assets/tasks/16_cooling_manifold.jpg" alt="cooling manifold" title="cooling manifold" loading="lazy">
+    <img src="assets/tasks/17_beam.jpg" alt="beam" title="beam" loading="lazy">
+    <img src="assets/tasks/18_tidy_counter.jpg" alt="tidy counter" title="tidy counter" loading="lazy">
+    <img src="assets/tasks/19_stool_circular.jpg" alt="stool circular" title="stool circular" loading="lazy">
+    <img src="assets/tasks/20_square.jpg" alt="square" title="square" loading="lazy">
+    <img src="assets/tasks/21_gamepad.jpg" alt="gamepad" title="gamepad" loading="lazy">
 </figure>
 
 <h2>Agentic robot control</h2>
